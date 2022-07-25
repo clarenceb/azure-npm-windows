@@ -85,7 +85,7 @@ kubectl delete -f windows-ingress-policy.yaml -n nsb
 Egress policy:
 
 ```sh
-# Only allow egress from Windows pod for app != win-client
+# Disallow egress from pod with selector app == win-client
 kubectl apply -f windows-egress-policy.yaml -n nsa
 
 # Windows to Linux (YES, app != win-client)
