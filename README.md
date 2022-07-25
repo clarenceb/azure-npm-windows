@@ -66,16 +66,16 @@ Ingress policy:
 # Only allow ingress to Windows pod from app == win-client
 kubectl apply -f ./windows-ingress-policy.yaml -n nsb
 
-# Linux to Linux (YES)
+# Linux to Linux (YES, no ingress policy for linuxapp)
 ./connect-agnhosts.sh nsa test-agnhost-linux $(PodlabelToIp "app=linuxapp")
 
-# Linux to Windows (YES)
-./connect-agnhosts.sh nsa test-agnhost-linux $(PodlabelToIp "app=linuxapp")
+# Windows to Linux (YES, no ingress policy for linuxapp)
+./connect-agnhosts.sh nsa test-agnhost-windows $(PodlabelToIp "app=linuxapp")
 
-# Windows to Linux (YES, app == win-client)
-./connect-agnhosts.sh nsa test-agnhost-windows $(PodlabelToIp "app=winapp")
+# Linux to Windows (NO, app != win-client)
+./connect-agnhosts.sh nsa test-agnhost-linux $(PodlabelToIp "app=winapp")
 
-# Windows to Windows (NO, app != win-client)
+# Windows to Windows (YES, app == win-client)
 ./connect-agnhosts.sh nsa test-agnhost-windows $(PodlabelToIp "app=winapp")
 
 # Cleanup
@@ -89,7 +89,7 @@ Egress policy:
 kubectl apply -f windows-egress-policy.yaml -n nsa
 
 # Windows to Linux (YES, app != win-client)
-./connect-agnhosts.sh nsa test-agnhost-windows $(PodlabelToIp "app=winapp")
+./connect-agnhosts.sh nsa test-agnhost-linux $(PodlabelToIp "app=winapp")
 
 # Windows to Windows (NO, app == win-client)
 ./connect-agnhosts.sh nsa test-agnhost-windows $(PodlabelToIp "app=winapp")
