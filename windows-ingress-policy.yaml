@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: windows-ingress-policy
+  namespace: nsb
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+        - winapp
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            ingress-allow: "yes"
+        podSelector:
+          matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - "win-client"
+      ports:
+      - port: 80
+        protocol: TCP

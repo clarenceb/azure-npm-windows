@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: winapp
+  labels:
+    app: winapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: winapp
+      labels:
+        app: winapp
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": windows
+      containers:
+      - name: sample
+        image: mcr.microsoft.com/dotnet/framework/samples:aspnetapp
+        resources:
+          limits:
+            cpu: 1
+            memory: 800M
+        ports:
+          - containerPort: 80
+  selector:
+    matchLabels:
+      app: winapp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: winapp
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+  selector:
+    app: winapp

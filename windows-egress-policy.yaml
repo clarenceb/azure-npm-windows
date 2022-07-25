@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: windows-egress-policy
+  namespace: nsa
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+        - "win-client"
+  policyTypes:
+    - Egress
+
